@@ -1,8 +1,8 @@
-struct MemoryBlock {
+struct Allocator {
     length: u64,
 }
 
-impl MemoryBlock {
+impl Allocator {
     pub fn size(&self) -> u64 {
         self.length
     }
@@ -10,13 +10,13 @@ impl MemoryBlock {
 
 #[cfg(test)]
 mod tests {
-    use crate::MemoryBlock;
+    use crate::Allocator;
     #[test]
     fn init_manager() {
-        let block = MemoryBlock {
+        let allocator = Allocator {
             length: 0,
         };
 
-        assert_eq!(block.size(), 0);
+        assert_eq!(allocator.size(), 0);
     }
 }
