@@ -9,7 +9,7 @@ impl Allocator {
 mod tests {
     use crate::Allocator;
     #[test]
-    fn init_manager() {
+    fn init_allocator() {
         let allocator = Allocator {
             size: 0,
         };
