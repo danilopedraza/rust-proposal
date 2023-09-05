@@ -10,6 +10,10 @@ impl Block {
 
         self.size = size;
     }
+
+    fn free(&mut self) {
+        self.occupied = false;
+    }
 }
 
 fn build_block(size: u64) -> Block {
@@ -88,6 +92,15 @@ mod tests {
         allocator.alloc(1);
 
         assert_eq!(allocator.block.size, 1);
-        assert_eq!(allocator.block.right.unwrap().size, 1);        
+        assert_eq!(allocator.block.right.unwrap().size, 1);      
+    }
+
+    #[test]
+    fn allocator_deallocates() {
+        let mut allocator = build_allocator(1);
+        allocator.alloc(1);
+        allocator.block.free();
+
+        assert_eq!(allocator.block.occupied, false);   
     }
 }
