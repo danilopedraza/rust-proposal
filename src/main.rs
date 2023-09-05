@@ -6,13 +6,17 @@ struct Block {
 
 impl Block {
     fn split(&mut self, size: u64) {
-        self.right = Some(Box::new(Block {
-            size: self.size - size,
-            occupied: false,
-            right: None,
-        }));
+        self.right = Some(Box::new(build_block(self.size - size)));
 
         self.size = size;
+    }
+}
+
+fn build_block(size: u64) -> Block {
+    Block {
+        size,
+        occupied: false,
+        right: None,
     }
 }
 
@@ -34,11 +38,7 @@ impl Allocator {
 fn build_allocator(size: u64) -> Allocator {
     Allocator {
         size,
-        block: Block {
-            size,
-            occupied: false,
-            right: None,
-        },
+        block: build_block(size),
     }
 }
 
