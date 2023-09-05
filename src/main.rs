@@ -1,8 +1,8 @@
-struct Manager {
+struct MemoryBlock {
     length: u64,
 }
 
-impl Manager {
+impl MemoryBlock {
     pub fn size(&self) -> u64 {
         self.length
     }
@@ -10,13 +10,13 @@ impl Manager {
 
 #[cfg(test)]
 mod tests {
-    use crate::Manager;
+    use crate::MemoryBlock;
     #[test]
     fn init_manager() {
-        let manager = Manager {
+        let block = MemoryBlock {
             length: 0,
         };
 
-        assert_eq!(manager.size(), 0);
+        assert_eq!(block.size(), 0);
     }
 }
