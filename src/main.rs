@@ -1,5 +1,6 @@
 struct Block {
     size: u64,
+    occupied: bool,
 }
 
 struct Allocator {
@@ -8,6 +9,9 @@ struct Allocator {
 }
 
 impl Allocator {
+    fn alloc(&self, _size: u64) {
+
+    }
 }
 
 fn build_allocator(size: u64) -> Allocator {
@@ -15,6 +19,7 @@ fn build_allocator(size: u64) -> Allocator {
         size,
         block: Block {
             size,
+            occupied: true,
         },
     }
 }
@@ -34,5 +39,13 @@ mod tests {
         let allocator = build_allocator(1);
 
         assert_eq!(allocator.block.size, 1);
+    }
+
+    #[test]
+    fn allocator_reserves_block() {
+        let allocator = build_allocator(1);
+        allocator.alloc(1);
+
+        assert_eq!(allocator.block.occupied, true);        
     }
 }
