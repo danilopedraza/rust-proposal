@@ -19,7 +19,7 @@ impl Block {
     fn free(&mut self) {
         self.occupied = false;
 
-        match &self.right {
+        match self.right {
             Some(_) => self.merge(),
             _ => (),
         }
