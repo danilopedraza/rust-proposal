@@ -31,13 +31,13 @@ struct Allocator {
 
 impl Allocator {
     fn alloc(&mut self, size: u64) {
-        if size < self.block.size {
-            self.block.split(size);
-        }
-
         let mut block = &mut self.block;
         while block.occupied {
             block = block.right.as_mut().unwrap();
+        }
+
+        if size < block.size {
+            block.split(size);
         }
 
         block.occupied = true;
