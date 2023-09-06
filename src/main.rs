@@ -11,8 +11,18 @@ impl Block {
         self.size = size;
     }
 
+    fn merge(&mut self) {
+        self.size += self.right.as_ref().unwrap().size;
+        self.right = None;
+    }
+
     fn free(&mut self) {
         self.occupied = false;
+
+        match &self.right {
+            Some(_) => self.merge(),
+            _ => (),
+        }
     }
 }
 
@@ -116,5 +126,23 @@ mod tests {
         allocator.block.free();
 
         assert_eq!(allocator.block.occupied, false);   
+    }
+
+    #[test]
+    fn deallocation_triggers_merge() {
+        let mut allocator = build_allocator(2);
+        allocator.alloc(1);
+        allocator.block.free();
+
+        assert!(allocator.block.right.is_none());
+    }
+
+    #[test]
+    fn merge_restores_size() {
+        let mut allocator = build_allocator(2);
+        allocator.alloc(1);
+        allocator.block.free();
+
+        assert_eq!(allocator.block.size, 2);
     }
 }
