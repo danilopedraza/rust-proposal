@@ -15,14 +15,22 @@ impl Block {
         self.size += self.right.as_ref().unwrap().size;
         self.right = None;
     }
-
+    
     fn free(&mut self) {
         self.occupied = false;
-
-        match self.right {
-            Some(_) => self.merge(),
-            _ => (),
+        
+        if self.right.is_some() && !self.right.as_ref().unwrap().occupied {
+            self.merge();
         }
+
+        // if let self.right = Some(right) && !right.occupied {
+        //     self.merge();
+        // } 
+
+        // match self.right {
+        //     Some(box Block { occupied: false, .. }) => self.merge(),
+        //     _ => (),
+        // }
     }
 }
 
@@ -145,4 +153,16 @@ mod tests {
 
         assert_eq!(allocator.block.size, 2);
     }
+
+    #[test]
+    fn merge_occurs_when_possible() {
+        let mut allocator = build_allocator(2);
+        allocator.alloc(1);
+        allocator.alloc(1);
+        allocator.block.free();
+
+        assert_eq!(allocator.block.size, 1);
+    }
 }
+
+fn main() {}
