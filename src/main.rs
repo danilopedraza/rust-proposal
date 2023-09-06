@@ -34,8 +34,13 @@ impl Allocator {
         if size < self.block.size {
             self.block.split(size);
         }
-    
-        self.block.occupied = true;
+
+        let mut block = &mut self.block;
+        while block.occupied {
+            block = block.right.as_mut().unwrap();
+        }
+
+        block.occupied = true;
     }
 }
 
@@ -93,6 +98,15 @@ mod tests {
 
         assert_eq!(allocator.block.size, 1);
         assert_eq!(allocator.block.right.unwrap().size, 1);      
+    }
+
+    #[test]
+    fn allocator_searches_for_free_block() {
+        let mut allocator = build_allocator(2);
+        allocator.alloc(1);
+        allocator.alloc(1);
+
+        assert_eq!(allocator.block.right.unwrap().occupied, true);
     }
 
     #[test]
