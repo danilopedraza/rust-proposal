@@ -11,17 +11,18 @@ impl Block {
         self.size = size;
     }
 
-    fn merge(&mut self) {
-        self.size += self.right.as_ref().unwrap().size;
-        self.right = None;
-    }
+    // fn merge(&mut self) {
+    //     self.size += self.right.as_ref().unwrap().size;
+    //     self.right = None;
+    // }
     
     fn free(&mut self) {
         self.occupied = false;
 
         if let Some(right) = &self.right {
             if !right.occupied {
-                self.merge();
+                self.size += right.size;
+                self.right = None;
             }
         }
 
