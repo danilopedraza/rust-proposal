@@ -10,26 +10,18 @@ impl Block {
 
         self.size = size;
     }
-
-    // fn merge(&mut self) {
-    //     self.size += self.right.as_ref().unwrap().size;
-    //     self.right = None;
-    // }
     
     fn free(&mut self) {
         self.occupied = false;
 
-        if let Some(right) = &self.right {
-            if !right.occupied {
-                self.size += right.size;
-                self.right = None;
+        self.right.take().map(|next| {
+            if !next.occupied {
+                self.size += next.size;
+                self.right = next.right;
+            } else {
+                self.right = Some(next);
             }
-        }
-
-        // match self.right {
-        //     Some(box Block { occupied: false, .. }) => self.merge(),
-        //     _ => (),
-        // }
+        });
     }
 }
 
@@ -161,6 +153,19 @@ mod tests {
         allocator.block.free();
 
         assert_eq!(allocator.block.size, 1);
+    }
+
+    #[test]
+    fn merge_preserves_next_blocks() {
+        let mut allocator = build_allocator(3);
+        allocator.alloc(1);
+        allocator.alloc(1);
+        allocator.alloc(1);
+
+        allocator.block.right.as_mut().unwrap().free();
+        allocator.block.free();
+
+        assert!(allocator.block.right.is_some());
     }
 }
 
