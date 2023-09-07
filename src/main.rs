@@ -18,14 +18,12 @@ impl Block {
     
     fn free(&mut self) {
         self.occupied = false;
-        
-        if self.right.is_some() && !self.right.as_ref().unwrap().occupied {
-            self.merge();
-        }
 
-        // if let self.right = Some(right) && !right.occupied {
-        //     self.merge();
-        // } 
+        if let Some(right) = &self.right {
+            if !right.occupied {
+                self.merge();
+            }
+        }
 
         // match self.right {
         //     Some(box Block { occupied: false, .. }) => self.merge(),
