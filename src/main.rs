@@ -155,7 +155,7 @@ mod tests {
     }
 
     #[test]
-    fn merge_occurs_when_possible() {
+    fn merge_occurs_only_when_possible() {
         let mut allocator = build_allocator(2);
         allocator.alloc(1);
         allocator.alloc(1);
